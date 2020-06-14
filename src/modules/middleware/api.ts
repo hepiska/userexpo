@@ -1,30 +1,18 @@
 import { normalize } from 'normalizr'
-import { request } from '@utils/services'
+import { request } from '../../utils/services'
 import { Alert } from 'react-native'
-import { setGlobalError } from '../global/action'
+import { AsyncStorage } from 'react-native'
 
 import * as actions from '../action-types'
 
-interface PayloadInterface {
-  url: string
-  startNetwork?: (label?: any) => void
-  label?: string
-  error?: (error: Error) => void
-  endNetwork?: (status?: string, err?: Error) => void
-  schema: any
-  requestParams: any
-  success: (normalizeData?: any, res?: any) => void
-}
 
-interface ActionType {
-  type: string
-  payload: PayloadInterface
-}
 
-const api = ({ dispatch, getState }) => next => (action: ActionType) => {
+
+const api = ({ dispatch, getState }) => next => async (action) => {
   if (action.type !== actions.API) {
     return next(action)
   }
+  const token = await AsyncStorage.getItem("token")
 
   const {
     url,
@@ -40,10 +28,9 @@ const api = ({ dispatch, getState }) => next => (action: ActionType) => {
   if (startNetwork) {
     dispatch(startNetwork(label))
   }
-  dispatch(setGlobalError(null))
 
   return request
-    .request({ url, ...requestParams })
+    .request({ url,headers:{Authorization: token}, ...requestParams, })
     .then(res => {
       let normalizeData = res.data.data
       if (schema && normalizeData) {
@@ -62,15 +49,8 @@ const api = ({ dispatch, getState }) => next => (action: ActionType) => {
       if (error) {
         dispatch(error(err))
       } else {
-        if (
-          requestParams &&
-          requestParams.method &&
-          requestParams.method !== 'GET'
-        ) {
-          Alert.alert('Error', err.message)
-        } else {
-          dispatch(setGlobalError(err))
-        }
+        Alert.alert('Error', err.message)
+       
       }
       if (endNetwork) {
         dispatch(endNetwork('error', err))
