@@ -12,9 +12,9 @@ const Stack = createStackNavigator();
 function Screens() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator options={{initialPage: "Home"}} op>
+        <Stack.Screen name="Home"   options={{ headerShown: false }} component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

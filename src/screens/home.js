@@ -1,13 +1,27 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { View, Text, ImageBackground, StyleSheet } from 'react-native';
+import { Button } from 'galio-framework';
+import Outlinebutton from '../components/atom/outlinebutton'
 
-function HomeScreen() {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, justifyContent: 'center'
+  },
+  button: {marginHorizontal: 16, marginVertical:16}
+})
+
+
+
+function HomeScreen({navigation}) {
+  const onPress = (type)=> () => {
+    navigation.navigate('Login', {type})
+  }
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-    </View>
+    <ImageBackground source={require("../images/image-bg.jpg")} style={styles.container}>
+      <Outlinebutton onPress={onPress('login')} color="white" style={styles.button} name="Login" />
+      <Outlinebutton onPress={onPress('register')} color="#faf393" style={styles.button} name="Register"/>
+
+    </ImageBackground>
   );
 }
 
