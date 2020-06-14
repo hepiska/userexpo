@@ -1,10 +1,12 @@
 import React,{useEffect, useState} from 'react';
-import { View, FlatList, SafeAreaView , StyleSheet} from 'react-native';
+import { View, FlatList, SafeAreaView ,TouchableOpacity, StyleSheet} from 'react-native';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {getusers} from '../modules/users/action'
+import {removeAuth} from '../modules/auth/action'
 import { NavBar,Text , Input} from 'galio-framework';
 import UserCard from '../components/molecules/user-card'
+import { CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -40,6 +42,13 @@ function UserList(props) {
     props.getusers({search, skip:_skip, limit})
   }
 
+  const logOut = () => {
+    props.removeAuth()
+    props.navigation.dispatch(
+      CommonActions.reset({index: 0, routes:[{name:'Home'}]})
+    )
+  }
+
   const handleSearchChange = (e) => {
     serSearch(e)
     if(timer){
@@ -66,9 +75,9 @@ function UserList(props) {
       <Input onChangeText={handleSearchChange}> </Input>
 
       </View>
-      <View style={{width:50}}>
-        <Text p1>me</Text>
-      </View>
+      <TouchableOpacity onPress={logOut} style={{width:50}}>
+        <Text p1>LogOut</Text>
+      </TouchableOpacity>
     </View>
     <FlatList 
     style={{flex:1}}
@@ -89,7 +98,7 @@ const mapStateToProps = (state) =>{
   }
 }
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({getusers}, dispatch)
+const mapDispatchToProps = (dispatch) => bindActionCreators({getusers, removeAuth}, dispatch)
 
 
 export default connect(mapStateToProps,mapDispatchToProps) (UserList);

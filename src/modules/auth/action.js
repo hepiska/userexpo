@@ -22,8 +22,10 @@ const setLoading = (data) => {
 }
 
 
-const removeAuth = () => {
-  return {type: actionType.REMOVE_AUTH, payload: data}
+export const removeAuth = () => {
+  AsyncStorage.removeItem("token")
+
+  return {type: actionType.REMOVE_AUTH}
 }
 
 
