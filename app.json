@@ -12,6 +12,8 @@
     ],
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "description": "",
+    "githubUrl": "https://github.com/hepiska/userexpo"
   }
 }
